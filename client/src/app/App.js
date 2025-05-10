@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
-import Toast from './components/Toast/Toast';
+import Toast from '../components/Toast/Toast';
 
 const API_BASE_URL = 'http://localhost:3001/api';
 const API_DOCS_URL = 'https://mail.re146.dev/api/swagger/#/';

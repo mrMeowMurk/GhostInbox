@@ -1,0 +1,94 @@
+.mailbox-info {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--header-text);
+  margin-left: 4px;
+}
+
+.mailbox-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mailbox-address-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: var(--transition);
+}
+
+.copy-button {
+  background: transparent;
+  border: none;
+  color: var(--header-text);
+  opacity: 0.6;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+.copy-button:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.copy-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+.mailbox-address {
+  opacity: 0.9;
+  user-select: all;
+}
+
+.mailbox-placeholder {
+  opacity: 0.7;
+}
+
+.update-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  opacity: 0.7;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.update-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #10B981;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.update-text {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+} 
