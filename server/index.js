@@ -132,38 +132,61 @@ async function parseEmailMessage(rawContent) {
     if (isEmailFormat(rawContent)) {
       const parsed = await simpleParser(rawContent);
       return {
-        from: parsed.from?.text || '',
-        to: parsed.to?.text || '',
+        from: {
+          text: parsed.from?.text || '',
+          value: parsed.from?.value?.[0] || { name: '', address: '' }
+        },
+        to: {
+          text: parsed.to?.text || '',
+          value: parsed.to?.value?.[0] || { name: '', address: '' }
+        },
         subject: parsed.subject || '',
         date: parsed.date || new Date(),
         text: parsed.text || '',
         html: parsed.html || '',
-        attachments: parsed.attachments || []
+        attachments: parsed.attachments?.map(att => ({
+          filename: att.filename,
+          contentType: att.contentType,
+          size: att.size,
+          contentDisposition: att.contentDisposition,
+          content: att.content
+        })) || [],
+        headers: {
+          'message-id': parsed.messageId,
+          'content-type': parsed.headerLines.find(h => h.key.toLowerCase() === 'content-type')?.line || '',
+          'mime-version': parsed.headerLines.find(h => h.key.toLowerCase() === 'mime-version')?.line || '',
+          'dkim-signature': parsed.headerLines.find(h => h.key.toLowerCase() === 'dkim-signature')?.line || '',
+        },
+        raw: rawContent // Сохраняем оригинальное сообщение
       };
     } else {
       // Если это не email, возвращаем контент как есть
       return {
-        from: '',
-        to: '',
+        from: { text: '', value: { name: '', address: '' } },
+        to: { text: '', value: { name: '', address: '' } },
         subject: '',
         date: new Date(),
         text: rawContent,
         html: rawContent.startsWith('<') ? rawContent : '',
-        attachments: []
+        attachments: [],
+        headers: {},
+        raw: rawContent
       };
     }
   } catch (error) {
     console.error('Ошибка при парсинге сообщения:', error);
     // В случае ошибки парсинга, возвращаем сырой контент
     return {
-      from: '',
-      to: '',
+      from: { text: '', value: { name: '', address: '' } },
+      to: { text: '', value: { name: '', address: '' } },
       subject: '',
       date: new Date(),
       text: rawContent,
       html: '',
       attachments: [],
-      error: error.message
+      headers: {},
+      error: error.message,
+      raw: rawContent
     };
   }
 }
@@ -201,7 +224,7 @@ app.get('/api/messages/:mailbox', async (req, res) => {
 // Получение конкретного сообщения
 app.get('/api/message/:mailboxId/:messageId', async (req, res) => {
   try {
-    const response = await fetch(`https://re146.dev/storage/${req.params.mailboxId}/${req.params.messageId}`, {
+    const response = await fetch(`https://mail.re146.dev/storage/${req.params.mailboxId}/${req.params.messageId}`, {
       headers: {
         'Accept': 'text/plain',
         'Accept-Encoding': 'zstd'
@@ -216,13 +239,19 @@ app.get('/api/message/:mailboxId/:messageId', async (req, res) => {
     const rawContent = await decodeZstdMessage(Buffer.from(buffer));
     const parsedContent = await parseEmailMessage(rawContent);
     
-    // Если это HTML контент, но поле html пустое, перемещаем текст в html
-    if (parsedContent.text.startsWith('<') && !parsedContent.html) {
-      parsedContent.html = parsedContent.text;
-      parsedContent.text = parsedContent.text.replace(/<[^>]+>/g, ''); // Удаляем HTML теги для текстовой версии
-    }
+    // Форматируем ответ в нужном формате
+    const formattedResponse = {
+      id: req.params.messageId,
+      from: parsedContent.from?.text || parsedContent.from?.value?.address || 'Неизвестный отправитель',
+      subject: parsedContent.subject || '',
+      receivedAt: parsedContent.date || new Date(),
+      content: parsedContent.html || parsedContent.text || '',
+      text: parsedContent.text || '',
+      html: parsedContent.html || '',
+      attachments: parsedContent.attachments || []
+    };
     
-    res.json(parsedContent);
+    res.json(formattedResponse);
   } catch (error) {
     console.error('Error fetching message content:', error);
     res.status(500).json({ error: 'Не удалось получить содержимое сообщения' });

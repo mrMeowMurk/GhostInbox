@@ -155,13 +155,7 @@ function App() {
       }
       
       const messageData = await response.json();
-      setSelectedMessage({
-        id: messageData.id,
-        from: messageData.from,
-        subject: messageData.subject,
-        receivedAt: messageData.receivedAt,
-        html: messageData.content
-      });
+      setSelectedMessage(messageData);
     } catch (error) {
       setError(error.message);
       console.error('Ошибка при чтении письма:', error);
@@ -232,7 +226,7 @@ function App() {
                   onClick={() => readMessage(message.id)}
                 >
                   <div className="message-header">
-                    <span className="from">{message.from}</span>
+                    <span className="from">{message.from || 'Неизвестный отправитель'}</span>
                     <span className="subject">{message.subject}</span>
                     <span className="date">
                       {new Date(message.receivedAt).toLocaleString()}
@@ -256,11 +250,11 @@ function App() {
           {selectedMessage && (
             <div className="message-body">
               <div className="message-details">
-                <p><strong>От:</strong> {selectedMessage.from}</p>
-                <p><strong>Тема:</strong> {selectedMessage.subject}</p>
+                <p><strong>От:</strong> {selectedMessage.from || 'Неизвестный отправитель'}</p>
+                <p><strong>Тема:</strong> {selectedMessage.subject || ''}</p>
                 <p><strong>Дата:</strong> {new Date(selectedMessage.receivedAt).toLocaleString()}</p>
               </div>
-              <div className="message-text" dangerouslySetInnerHTML={{ __html: selectedMessage.html }} />
+              <div className="message-text" dangerouslySetInnerHTML={{ __html: selectedMessage.html || selectedMessage.text || '' }} />
             </div>
           )}
         </div>
