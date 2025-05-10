@@ -1,70 +1,90 @@
-# Getting Started with Create React App
+# 👻 GhostInbox
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
 
-## Available Scripts
+Минималистичный и современный сервис временной почты с автоматическим обновлением и стильным интерфейсом.
 
-In the project directory, you can run:
+## ✨ Особенности
 
-### `npm start`
+- **Мгновенное создание** - Создавайте временный почтовый ящик одним кликом
+- **Автообновление** - Автоматическая проверка новых писем каждые 15 секунд
+- **Современный интерфейс** - Минималистичный дизайн с поддержкой светлой и тёмной темы
+- **Удобство использования** - Быстрое копирование адреса, просмотр писем в реальном времени
+- **Безопасность** - Временные адреса для защиты вашей основной почты
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🚀 Технологии
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- React.js
+- Express.js
+- Node.js
+- WebSocket для real-time обновлений
+- Современный CSS
 
-### `npm test`
+## 🛠 Установка
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Клонируйте репозиторий:
+```bash
+git clone https://github.com/yourusername/ghostinbox.git
+cd ghostinbox
+```
 
-### `npm run build`
+2. Установите зависимости для клиента и сервера:
+```bash
+# Установка зависимостей клиента
+cd client
+npm install
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Установка зависимостей сервера
+cd ../server
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Создайте `.env` файл в папке сервера:
+```env
+PORT=3001
+API_URL=https://mail.re146.dev/api
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. Запустите проект:
+```bash
+# Запуск сервера
+cd server
+npm start
 
-### `npm run eject`
+# Запуск клиента (в новом терминале)
+cd client
+npm start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 💻 Использование
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Откройте приложение в браузере (по умолчанию http://localhost:3000)
+2. Нажмите кнопку ✨ для создания временного почтового ящика
+3. Используйте полученный адрес для получения писем
+4. Письма будут автоматически появляться в интерфейсе
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🔧 API
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Проект использует API временной почты. Документация доступна по адресу:
+https://mail.re146.dev/api/swagger/#/
 
-## Learn More
+## 🤝 Вклад в проект
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Мы приветствуем ваш вклад в развитие проекта! Для этого:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Форкните репозиторий
+2. Создайте ветку для ваших изменений
+3. Внесите изменения и создайте Pull Request
 
-### Code Splitting
+## 📝 Лицензия
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Проект распространяется под лицензией MIT. Подробности в файле [LICENSE](LICENSE)
 
-### Analyzing the Bundle Size
+## 👥 Авторы
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- Автор проекта - [Ваше имя](https://github.com/yourusername)
 
-### Making a Progressive Web App
+## 🌟 Благодарности
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [mail.re146.dev](https://mail.re146.dev) за предоставление API временной почты

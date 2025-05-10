@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
-import Toast from './components/Toast';
+import Toast from './components/Toast/Toast';
 
 const API_BASE_URL = 'http://localhost:3001/api';
 const API_DOCS_URL = 'https://mail.re146.dev/api/swagger/#/';
@@ -212,9 +212,6 @@ ${selectedMessage.text || selectedMessage.html?.replace(/<[^>]+>/g, '') || ''}`;
       <header className="App-header">
         <div className="header-content">
           <div className="header-left">
-            <button className="icon-button menu-button">
-              <span className="icon">☰</span>
-            </button>
             <button className="icon-button create-button" onClick={createMailbox}>
               <span className="icon">✨</span>
             </button>
