@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
+import Toast from './components/Toast';
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
@@ -9,7 +10,7 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
-  const [error, setError] = useState('');
+  const [notification, setNotification] = useState('');
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) return savedTheme;
@@ -73,7 +74,6 @@ function App() {
 
   const createMailbox = async () => {
     try {
-      setError('');
       setLoading(true);
       const response = await fetch(`${API_BASE_URL}/email`, {
         method: 'POST'
@@ -93,7 +93,6 @@ function App() {
       // Запускаем опрос сообщений
       startPolling(data.address, data.mailboxId);
     } catch (error) {
-      setError(error.message);
       console.error('Ошибка при создании почтового ящика:', error);
     } finally {
       setLoading(false);
@@ -133,7 +132,6 @@ function App() {
         setMessages([]);
       }
     } catch (error) {
-      setError(error.message);
       console.error('Ошибка при получении писем:', error);
       setMessages([]);
     } finally {
@@ -145,8 +143,6 @@ function App() {
     if (!mailboxId) return;
 
     try {
-      setError('');
-      setLoading(true);
       const response = await fetch(`${API_BASE_URL}/message/${mailboxId}/${id}`);
       
       if (!response.ok) {
@@ -157,20 +153,16 @@ function App() {
       const messageData = await response.json();
       setSelectedMessage(messageData);
     } catch (error) {
-      setError(error.message);
       console.error('Ошибка при чтении письма:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(mailbox);
-      setError('Email скопирован');
-      setTimeout(() => setError(''), 2000);
+      setNotification('Email скопирован');
     } catch (error) {
-      setError('Ошибка при копировании');
+      setNotification('Ошибка при копировании');
     }
   };
 
@@ -205,7 +197,6 @@ function App() {
             </button>
           </div>
         </div>
-        {error && <div className="error-message">{error}</div>}
       </header>
       
       <main className="App-main">
@@ -263,6 +254,13 @@ function App() {
       <footer className="App-footer">
         <p>Временная почта - {new Date().getFullYear()}</p>
       </footer>
+
+      {notification && (
+        <Toast 
+          message={notification} 
+          onClose={() => setNotification('')} 
+        />
+      )}
     </div>
   );
 }

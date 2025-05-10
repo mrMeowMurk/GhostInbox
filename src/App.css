@@ -361,14 +361,9 @@ select:focus {
   line-height: 1.6;
 }
 
+/* Удаляем старые стили для сообщений об ошибках */
 .error-message {
-  background-color: rgba(239, 68, 68, 0.1);
-  color: rgb(239, 68, 68);
-  padding: 8px 16px;
-  margin-top: 8px;
-  border-radius: 4px;
-  font-size: 14px;
-  text-align: center;
+  display: none;
 }
 
 button:disabled {
