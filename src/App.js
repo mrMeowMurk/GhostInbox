@@ -3,6 +3,7 @@ import './App.css';
 import Toast from './components/Toast';
 
 const API_BASE_URL = 'http://localhost:3001/api';
+const API_DOCS_URL = 'https://mail.re146.dev/api/swagger/#/';
 
 function App() {
   const [mailbox, setMailbox] = useState('');
@@ -166,6 +167,26 @@ function App() {
     }
   };
 
+  const downloadMessageAsTxt = () => {
+    if (!selectedMessage) return;
+
+    const content = `От: ${selectedMessage.from || 'Неизвестный отправитель'}
+Тема: ${selectedMessage.subject || ''}
+Дата: ${new Date(selectedMessage.receivedAt).toLocaleString()}
+
+${selectedMessage.text || selectedMessage.html?.replace(/<[^>]+>/g, '') || ''}`;
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `message-${selectedMessage.id}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  };
+
   useEffect(() => {
     // Очищаем интервал при размонтировании компонента
     return () => {
@@ -241,9 +262,20 @@ function App() {
           {selectedMessage && (
             <div className="message-body">
               <div className="message-details">
-                <p><strong>От:</strong> {selectedMessage.from || 'Неизвестный отправитель'}</p>
-                <p><strong>Тема:</strong> {selectedMessage.subject || ''}</p>
-                <p><strong>Дата:</strong> {new Date(selectedMessage.receivedAt).toLocaleString()}</p>
+                <div className="message-details-header">
+                  <div>
+                    <p><strong>От:</strong> {selectedMessage.from || 'Неизвестный отправитель'}</p>
+                    <p><strong>Тема:</strong> {selectedMessage.subject || ''}</p>
+                    <p><strong>Дата:</strong> {new Date(selectedMessage.receivedAt).toLocaleString()}</p>
+                  </div>
+                  <button 
+                    className="download-button"
+                    onClick={downloadMessageAsTxt}
+                    title="Скачать в формате TXT"
+                  >
+                    📄
+                  </button>
+                </div>
               </div>
               <div className="message-text" dangerouslySetInnerHTML={{ __html: selectedMessage.html || selectedMessage.text || '' }} />
             </div>
@@ -252,7 +284,26 @@ function App() {
       </main>
 
       <footer className="App-footer">
-        <p>Временная почта - {new Date().getFullYear()}</p>
+        <div className="footer-content">
+          <div className="footer-left">
+            <p>Временная почта © {new Date().getFullYear()}</p>
+          </div>
+          <div className="footer-center">
+            <a href={API_DOCS_URL} target="_blank" rel="noopener noreferrer" className="api-link">
+              <span className="api-icon">⚡</span>
+              API
+            </a>
+          </div>
+          <div className="footer-right">
+            {mailbox && (
+              <div className="footer-stats">
+                <span>Писем: {messages.length}</span>
+                <span className="footer-dot">•</span>
+                <span>Почтовый ящик активен</span>
+              </div>
+            )}
+          </div>
+        </div>
       </footer>
 
       {notification && (
